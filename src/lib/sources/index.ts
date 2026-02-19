@@ -28,3 +28,7 @@ export async function fetchAllSources(): Promise<
 }
 
 export * from './types'
+
+import { googleNewsFetcher } from './google-news'
+
+registerSource(googleNewsFetcher)
