@@ -30,5 +30,7 @@ export async function fetchAllSources(): Promise<
 export * from './types'
 
 import { googleNewsFetcher } from './google-news'
+import { youtubeFetcher } from './youtube'
 
 registerSource(googleNewsFetcher)
+registerSource(youtubeFetcher)
