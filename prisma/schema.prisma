@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SourceType {
+  news
+  youtube
+  bluesky
+  government
+}
+
+enum Importance {
+  high
+  medium
+  low
+}
+
+enum DigestFrequency {
+  daily
+  weekly
+}
+
+enum ImportanceFilter {
+  high_only
+  high_and_medium
+  all
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  city      String?
+  county    String?
+  state     String   @db.Char(2)
+  firstSeen DateTime @default(now())
+  clipCount Int      @default(0)
+  clips     Clip[]
+
+  @@unique([city, county, state])
+  @@index([state])
+}
+
+model Clip {
+  id           String     @id @default(uuid())
+  url          String     @unique
+  title        String
+  summary      String?
+  content      String?
+  sourceType   SourceType
+  sourceName   String
+  publishedAt  DateTime?
+  discoveredAt DateTime   @default(now())
+  locationId   String?
+  location     Location?  @relation(fields: [locationId], references: [id])
+  importance   Importance @default(medium)
+  topics       String[]
+  rawData      Json?
+  stars        Star[]
+
+  @@index([importance])
+  @@index([discoveredAt])
+  @@index([locationId])
+}
+
+model User {
+  id              String            @id @default(uuid())
+  email           String            @unique
+  name            String
+  passwordHash    String
+  createdAt       DateTime          @default(now())
+  digestPreference DigestPreference?
+  stars           Star[]
+}
+
+model DigestPreference {
+  id         String           @id @default(uuid())
+  userId     String           @unique
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  frequency  DigestFrequency  @default(daily)
+  topics     String[]
+  states     String[]
+  importance ImportanceFilter @default(high_and_medium)
+}
+
+model Star {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clipId    String
+  clip      Clip     @relation(fields: [clipId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, clipId])
+}
