@@ -31,6 +31,8 @@ export * from './types'
 
 import { googleNewsFetcher } from './google-news'
 import { youtubeFetcher } from './youtube'
+import { blueskyFetcher } from './bluesky'
 
 registerSource(googleNewsFetcher)
 registerSource(youtubeFetcher)
+registerSource(blueskyFetcher)
