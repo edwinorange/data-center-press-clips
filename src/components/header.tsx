@@ -23,6 +23,9 @@ export function Header() {
           <Link href="/starred" className="text-sm text-gray-600 hover:text-gray-900">
             Starred
           </Link>
+          <Link href="/posts" className="text-sm text-gray-600 hover:text-gray-900">
+            Posts
+          </Link>
           <Link href="/settings" className="text-sm text-gray-600 hover:text-gray-900">
             Settings
           </Link>
