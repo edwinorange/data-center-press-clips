@@ -3,6 +3,11 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { TOPICS, STATES } from '@/lib/types'
 
+const BUCKETS = [
+  { value: 'news_clip', label: 'News Clips' },
+  { value: 'public_meeting', label: 'Public Meetings' },
+]
+
 export function FilterSidebar() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -21,10 +26,31 @@ export function FilterSidebar() {
   const currentImportance = searchParams.get('importance')
   const currentTopic = searchParams.get('topic')
   const currentState = searchParams.get('state')
-  const currentSourceType = searchParams.get('sourceType')
+  const currentBucket = searchParams.get('bucket')
 
   return (
     <aside className="w-64 flex-shrink-0 space-y-6">
+      <div>
+        <h3 className="text-sm font-medium text-gray-900 mb-2">Type</h3>
+        <div className="space-y-1">
+          {BUCKETS.map(({ value, label }) => (
+            <button
+              key={value}
+              onClick={() =>
+                updateFilter('bucket', currentBucket === value ? null : value)
+              }
+              className={`block w-full text-left px-3 py-1.5 text-sm rounded ${
+                currentBucket === value
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'hover:bg-gray-100'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div>
         <h3 className="text-sm font-medium text-gray-900 mb-2">Importance</h3>
         <div className="space-y-1">
@@ -68,27 +94,6 @@ export function FilterSidebar() {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-gray-900 mb-2">Source</h3>
-        <div className="space-y-1">
-          {['news', 'youtube', 'bluesky', 'government'].map((source) => (
-            <button
-              key={source}
-              onClick={() =>
-                updateFilter('sourceType', currentSourceType === source ? null : source)
-              }
-              className={`block w-full text-left px-3 py-1.5 text-sm rounded ${
-                currentSourceType === source
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'hover:bg-gray-100'
-              }`}
-            >
-              {source.charAt(0).toUpperCase() + source.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div>
         <h3 className="text-sm font-medium text-gray-900 mb-2">State</h3>
         <select
           value={currentState || ''}
@@ -104,7 +109,7 @@ export function FilterSidebar() {
         </select>
       </div>
 
-      {(currentImportance || currentTopic || currentState || currentSourceType) && (
+      {(currentImportance || currentTopic || currentState || currentBucket) && (
         <button
           onClick={() => router.push('/')}
           className="text-sm text-blue-600 hover:underline"
