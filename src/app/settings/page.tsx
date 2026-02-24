@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -28,8 +29,9 @@ export default async function SettingsPage({
 
   const isLinkedInConnected = !!user?.linkedinAccessToken
   const tokenExpiry = user?.linkedinTokenExpiry
+  const now = new Date()
   const isTokenExpiring =
-    tokenExpiry && tokenExpiry.getTime() - Date.now() < 7 * 24 * 60 * 60 * 1000
+    tokenExpiry && tokenExpiry.getTime() - now.getTime() < 7 * 24 * 60 * 60 * 1000
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -67,24 +69,24 @@ export default async function SettingsPage({
                   {isTokenExpiring && ' — reconnect soon to avoid interruption'}
                 </p>
               )}
-              <a
+              <Link
                 href="/api/auth/linkedin"
                 className="mt-3 inline-block px-4 py-2 text-sm border rounded hover:bg-gray-50"
               >
                 Reconnect LinkedIn
-              </a>
+              </Link>
             </div>
           ) : (
             <div>
               <p className="text-sm text-gray-600 mb-3">
                 Connect your LinkedIn account to draft and publish posts about data center clips.
               </p>
-              <a
+              <Link
                 href="/api/auth/linkedin"
                 className="inline-block px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
               >
                 Connect LinkedIn
-              </a>
+              </Link>
             </div>
           )}
         </section>
