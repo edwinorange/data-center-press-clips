@@ -29,10 +29,11 @@ export async function fetchAllSources(): Promise<
 
 export * from './types'
 
-import { googleNewsFetcher } from './google-news'
-import { youtubeFetcher } from './youtube'
-import { blueskyFetcher } from './bluesky'
+// v1: YouTube only. Uncomment these for v2:
+// import { googleNewsFetcher } from './google-news'
+// import { blueskyFetcher } from './bluesky'
+// registerSource(googleNewsFetcher)
+// registerSource(blueskyFetcher)
 
-registerSource(googleNewsFetcher)
+import { youtubeFetcher } from './youtube'
 registerSource(youtubeFetcher)
-registerSource(blueskyFetcher)

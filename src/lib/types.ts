@@ -20,13 +20,20 @@ export const STATES = [
 
 export type State = (typeof STATES)[number]
 
+export type ClipBucket = 'news_clip' | 'public_meeting'
+
 export interface ClassificationResult {
   location: {
     city?: string
     county?: string
     state: State
+    latitude?: number
+    longitude?: number
   }
+  companies: string[]
+  govEntities: string[]
   topics: Topic[]
   importance: 'high' | 'medium' | 'low'
   summary: string
+  relevanceScore: number
 }

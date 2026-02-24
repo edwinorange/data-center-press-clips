@@ -1,3 +1,5 @@
+import { ClipBucket } from '../types'
+
 export interface RawClip {
   url: string
   title: string
@@ -5,6 +7,10 @@ export interface RawClip {
   sourceName: string
   publishedAt?: Date
   rawData?: Record<string, unknown>
+  videoId?: string
+  durationSecs?: number
+  bucket?: ClipBucket
+  thumbnailUrl?: string
 }
 
 export interface SourceFetcher {
