@@ -48,3 +48,7 @@ worker/node_modules/
 
 # worktrees
 .worktrees/
+
+# thumbnails
+public/thumbnails/*
+!public/thumbnails/.gitkeep
