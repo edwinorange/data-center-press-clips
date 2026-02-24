@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const importance = searchParams.get('importance')
   const topic = searchParams.get('topic')
   const state = searchParams.get('state')
-  const sourceType = searchParams.get('sourceType')
+  const bucket = searchParams.get('bucket')
   const search = searchParams.get('search')
 
   const where: Prisma.ClipWhereInput = {}
@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
     where.location = { state }
   }
 
-  if (sourceType) {
-    where.sourceType = sourceType as 'news' | 'youtube' | 'bluesky' | 'government'
+  if (bucket) {
+    where.bucket = bucket as 'news_clip' | 'public_meeting'
   }
 
   if (search) {
