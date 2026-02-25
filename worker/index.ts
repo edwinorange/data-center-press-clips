@@ -6,22 +6,45 @@ import {
   shouldSendWeeklyDigest,
 } from './digest'
 
-const POLL_INTERVAL_MS = 15 * 60 * 1000 // 15 minutes
+const CHECK_INTERVAL_MS = 5 * 60 * 1000 // Check every 5 minutes
+const RUN_HOURS_ET = [6, 12, 18, 0] // 6am, 12pm, 6pm, 12am ET
 
 let lastDailyDigest: string | null = null
 let lastWeeklyDigest: string | null = null
+let lastRunHour: number | null = null
+
+function getCurrentETHour(): number {
+  const now = new Date()
+  const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+  return et.getHours()
+}
+
+function shouldRunNow(): boolean {
+  const currentHour = getCurrentETHour()
+  if (!RUN_HOURS_ET.includes(currentHour)) return false
+  if (lastRunHour === currentHour) return false
+  return true
+}
 
 async function runWorker() {
-  console.log('Worker started')
+  console.log('Worker started — running every 6 hours (6am, 12pm, 6pm, 12am ET)')
 
   while (true) {
     try {
-      // Process new clips
-      console.log(`[${new Date().toISOString()}] Processing clips...`)
-      const result = await processNewClips()
-      console.log(
-        `[${new Date().toISOString()}] Processed ${result.processed} clips, ${result.errors} errors`
-      )
+      if (shouldRunNow()) {
+        const currentHour = getCurrentETHour()
+        lastRunHour = currentHour
+
+        // Process new clips
+        console.log(`[${new Date().toISOString()}] Processing clips (${currentHour}:00 ET run)...`)
+        const result = await processNewClips()
+        console.log(
+          `[${new Date().toISOString()}] Done: ${result.processed} stored, ` +
+          `${result.skippedRelevance} low-relevance, ` +
+          `${result.skippedDuplicate} duplicates, ` +
+          `${result.errors} errors`
+        )
+      }
 
       // Check for digest sending
       const today = new Date().toISOString().split('T')[0]
@@ -41,7 +64,7 @@ async function runWorker() {
       console.error('Worker error:', error)
     }
 
-    await sleep(POLL_INTERVAL_MS)
+    await sleep(CHECK_INTERVAL_MS)
   }
 }
 
