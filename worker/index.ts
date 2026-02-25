@@ -1,16 +1,18 @@
 import { processNewClips } from '../src/lib/processor'
-import {
-  sendDailyDigests,
-  sendWeeklyDigests,
-  shouldSendDailyDigest,
-  shouldSendWeeklyDigest,
-} from './digest'
+// MOTHBALLED: digest functionality
+// import {
+//   sendDailyDigests,
+//   sendWeeklyDigests,
+//   shouldSendDailyDigest,
+//   shouldSendWeeklyDigest,
+// } from './digest'
 
 const CHECK_INTERVAL_MS = 5 * 60 * 1000 // Check every 5 minutes
 const RUN_HOURS_ET = [6, 12, 18, 0] // 6am, 12pm, 6pm, 12am ET
 
-let lastDailyDigest: string | null = null
-let lastWeeklyDigest: string | null = null
+// MOTHBALLED: digest functionality
+// let lastDailyDigest: string | null = null
+// let lastWeeklyDigest: string | null = null
 let lastRunHour: number | null = null
 
 function getCurrentETHour(): number {
@@ -46,20 +48,20 @@ async function runWorker() {
         )
       }
 
-      // Check for digest sending
-      const today = new Date().toISOString().split('T')[0]
-
-      if (shouldSendDailyDigest() && lastDailyDigest !== today) {
-        console.log(`[${new Date().toISOString()}] Sending daily digests...`)
-        await sendDailyDigests()
-        lastDailyDigest = today
-      }
-
-      if (shouldSendWeeklyDigest() && lastWeeklyDigest !== today) {
-        console.log(`[${new Date().toISOString()}] Sending weekly digests...`)
-        await sendWeeklyDigests()
-        lastWeeklyDigest = today
-      }
+      // MOTHBALLED: digest functionality
+      // const today = new Date().toISOString().split('T')[0]
+      //
+      // if (shouldSendDailyDigest() && lastDailyDigest !== today) {
+      //   console.log(`[${new Date().toISOString()}] Sending daily digests...`)
+      //   await sendDailyDigests()
+      //   lastDailyDigest = today
+      // }
+      //
+      // if (shouldSendWeeklyDigest() && lastWeeklyDigest !== today) {
+      //   console.log(`[${new Date().toISOString()}] Sending weekly digests...`)
+      //   await sendWeeklyDigests()
+      //   lastWeeklyDigest = today
+      // }
     } catch (error) {
       console.error('Worker error:', error)
     }
