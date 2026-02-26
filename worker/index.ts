@@ -1,3 +1,4 @@
+import http from 'http'
 import { processNewClips } from '../src/lib/processor'
 // MOTHBALLED: digest functionality
 // import {
@@ -27,6 +28,15 @@ function shouldRunNow(): boolean {
   if (lastRunHour === currentHour) return false
   return true
 }
+
+// Health check server for Railway
+const PORT = parseInt(process.env.PORT || '3000', 10)
+http.createServer((_req, res) => {
+  res.writeHead(200)
+  res.end('ok')
+}).listen(PORT, () => {
+  console.log(`Health check server listening on port ${PORT}`)
+})
 
 async function runWorker() {
   console.log('Worker started — running every 6 hours (6am, 12pm, 6pm, 12am ET)')
