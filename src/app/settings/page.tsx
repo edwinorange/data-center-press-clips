@@ -1,18 +1,19 @@
 // MOTHBALLED: LinkedIn and digest settings
 // import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+// MOTHBALLED: auth
+// import { redirect } from 'next/navigation'
+// import { getServerSession } from 'next-auth'
+// import { authOptions } from '@/lib/auth'
 // MOTHBALLED: digest settings form
 // import { DigestSettingsForm } from '@/components/digest-settings-form'
 import { Header } from '@/components/header'
 
 export default async function SettingsPage() {
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect('/login')
-  }
+  // MOTHBALLED: auth
+  // const session = await getServerSession(authOptions)
+  // if (!session) {
+  //   redirect('/login')
+  // }
 
   // MOTHBALLED: LinkedIn connection status
   // const params = await searchParams

@@ -1,17 +1,22 @@
-import { redirect } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+// MOTHBALLED: auth
+// import { redirect } from 'next/navigation'
+// import { getServerSession } from 'next-auth'
+// import { authOptions } from '@/lib/auth'
+// Force dynamic rendering — previously getServerSession made this dynamic;
+// child components (SearchBar, FilterSidebar) use useSearchParams()
+export const dynamic = 'force-dynamic'
+
 import { Header } from '@/components/header'
 import { FilterSidebar } from '@/components/filter-sidebar'
 import { SearchBar } from '@/components/search-bar'
 import { ClipFeed } from '@/components/clip-feed'
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect('/login')
-  }
+  // MOTHBALLED: auth
+  // const session = await getServerSession(authOptions)
+  // if (!session) {
+  //   redirect('/login')
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50">

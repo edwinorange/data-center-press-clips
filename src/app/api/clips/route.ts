@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+// MOTHBALLED: auth
+// import { getServerSession } from 'next-auth'
+// import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { Prisma } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions)
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  // MOTHBALLED: auth
+  // const session = await getServerSession(authOptions)
+  // if (!session) {
+  //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  // }
 
   const { searchParams } = new URL(request.url)
   const page = parseInt(searchParams.get('page') || '1')
@@ -50,10 +52,11 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         location: true,
-        stars: {
-          where: { userId: session.user.id },
-          select: { id: true },
-        },
+        // MOTHBALLED: auth — stars join requires session.user.id
+        // stars: {
+        //   where: { userId: session.user.id },
+        //   select: { id: true },
+        // },
       },
       orderBy: { discoveredAt: 'desc' },
       skip: (page - 1) * limit,
@@ -65,8 +68,8 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     clips: clips.map((clip) => ({
       ...clip,
-      isStarred: clip.stars.length > 0,
-      stars: undefined,
+      // MOTHBALLED: auth — hardcode false without session
+      isStarred: false,
     })),
     total,
     page,

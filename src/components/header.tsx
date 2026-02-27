@@ -1,10 +1,12 @@
 'use client'
 
-import { signOut, useSession } from 'next-auth/react'
+// MOTHBALLED: auth
+// import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 export function Header() {
-  const { data: session } = useSession()
+  // MOTHBALLED: auth
+  // const { data: session } = useSession()
 
   return (
     <header className="bg-white border-b">
@@ -20,9 +22,10 @@ export function Header() {
           <Link href="/locations" className="text-sm text-gray-600 hover:text-gray-900">
             Locations
           </Link>
-          <Link href="/starred" className="text-sm text-gray-600 hover:text-gray-900">
+          {/* MOTHBALLED: auth — starred requires user session */}
+          {/* <Link href="/starred" className="text-sm text-gray-600 hover:text-gray-900">
             Starred
-          </Link>
+          </Link> */}
           {/* MOTHBALLED: LinkedIn posts page */}
           {/* <Link href="/posts" className="text-sm text-gray-600 hover:text-gray-900">
             Posts
@@ -32,7 +35,8 @@ export function Header() {
           </Link>
         </nav>
 
-        {session && (
+        {/* MOTHBALLED: auth — user name + sign out */}
+        {/* {session && (
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{session.user.name}</span>
             <button
@@ -42,7 +46,7 @@ export function Header() {
               Sign out
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </header>
   )

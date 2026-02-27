@@ -43,20 +43,22 @@ function formatDuration(seconds: number | null): string {
 }
 
 export function ClipCard({ clip }: { clip: ClipWithLocation }) {
-  const [isStarred, setIsStarred] = useState(clip.isStarred)
+  // MOTHBALLED: auth — starring disabled
+  // const [isStarred, setIsStarred] = useState(clip.isStarred)
   const [expanded, setExpanded] = useState(false)
   // MOTHBALLED: LinkedIn draft button
   // const [drafting, setDrafting] = useState(false)
 
-  async function toggleStar() {
-    const response = await fetch(`/api/clips/${clip.id}/star`, {
-      method: 'POST',
-    })
-    if (response.ok) {
-      const data = await response.json()
-      setIsStarred(data.starred)
-    }
-  }
+  // MOTHBALLED: auth — starring disabled
+  // async function toggleStar() {
+  //   const response = await fetch(`/api/clips/${clip.id}/star`, {
+  //     method: 'POST',
+  //   })
+  //   if (response.ok) {
+  //     const data = await response.json()
+  //     setIsStarred(data.starred)
+  //   }
+  // }
 
   // MOTHBALLED: LinkedIn draft button
   // async function draftLinkedInPost() {
@@ -164,10 +166,11 @@ export function ClipCard({ clip }: { clip: ClipWithLocation }) {
             </div>
 
             <div className="flex flex-col items-center gap-2">
+              {/* MOTHBALLED: auth — star button disabled */}
               <button
-                onClick={toggleStar}
-                className={`p-1 rounded hover:bg-gray-100 ${isStarred ? 'text-yellow-500' : 'text-gray-300'}`}
-                title={isStarred ? 'Unstar' : 'Star'}
+                disabled
+                className="p-1 rounded text-gray-200 cursor-not-allowed"
+                title="Starring is disabled"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
