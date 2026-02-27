@@ -48,8 +48,8 @@ Closed caption transcript:
 {{TRANSCRIPT}}`
 
 const TRANSCRIPT_LIMITS: Record<ClipBucket, number> = {
-  news_clip: 8000,
-  public_meeting: 16000,
+  news_clip: 24000,
+  public_meeting: 48000,
 }
 
 const SUMMARY_LENGTHS: Record<ClipBucket, string> = {

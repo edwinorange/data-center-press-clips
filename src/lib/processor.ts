@@ -2,6 +2,7 @@ import { db } from './db'
 import { classifyClip, getDefaultClassification } from './classifier'
 import { RawClip, fetchAllSources } from './sources'
 import { fetchCaptions } from './captions'
+import { geocodeLocation } from './geocodio'
 import { downloadThumbnail } from './thumbnails'
 import { Prisma } from '@prisma/client'
 import { ClipBucket } from './types'
@@ -77,6 +78,15 @@ export async function processNewClips(): Promise<{
         // Find or create location
         let locationId: string | null = null
         if (classification.location) {
+          // Geocode with Geocodio for precise coordinates
+          const geocoded = await geocodeLocation(
+            classification.location.city,
+            classification.location.county,
+            classification.location.state
+          )
+          const latitude = geocoded?.latitude ?? classification.location.latitude
+          const longitude = geocoded?.longitude ?? classification.location.longitude
+
           const location = await db.location.upsert({
             where: {
               city_county_state: {
@@ -89,14 +99,14 @@ export async function processNewClips(): Promise<{
               city: classification.location.city,
               county: classification.location.county,
               state: classification.location.state,
-              latitude: classification.location.latitude,
-              longitude: classification.location.longitude,
+              latitude,
+              longitude,
             },
             update: {
               clipCount: { increment: 1 },
-              ...(classification.location.latitude != null && {
-                latitude: classification.location.latitude,
-                longitude: classification.location.longitude,
+              ...(latitude != null && {
+                latitude,
+                longitude,
               }),
             },
           })
