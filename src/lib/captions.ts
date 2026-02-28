@@ -1,7 +1,8 @@
 const INNERTUBE_BASE = 'https://www.youtube.com/youtubei/v1'
 const TV_CLIENT = {
-  clientName: 'TVHTML5_SIMPLY_EMBEDDED_PLAYER',
-  clientVersion: '2.0',
+  clientName: 'ANDROID',
+  clientVersion: '19.09.37',
+  androidSdkVersion: 30,
   hl: 'en',
   gl: 'US',
 }
@@ -76,14 +77,15 @@ export async function fetchCaptions(videoId: string): Promise<string | null> {
     }
 
     // Step 4: Parse XML and extract text
-    const segments = [...xml.matchAll(/<text[^>]*>([\s\S]*?)<\/text>/g)]
+    // YouTube returns format="3" with <p> tags from ANDROID client, or <text> tags from other clients
+    const segments = [...xml.matchAll(/<(?:text|p)[^>]*>([\s\S]*?)<\/(?:text|p)>/g)]
     if (segments.length === 0) {
       console.warn(`No text segments found in captions for ${videoId}`)
       return null
     }
 
     const fullText = segments
-      .map((m) => decodeHtmlEntities(m[1]))
+      .map((m) => decodeHtmlEntities(m[1].replace(/<[^>]+>/g, '')))
       .join(' ')
       .replace(/\n/g, ' ')
       .replace(/\s+/g, ' ')
